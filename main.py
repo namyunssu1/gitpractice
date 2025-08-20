@@ -11,9 +11,13 @@ class TicTacToe:
         현재 보드 상태를 출력하는 함수
         담당자: Person A가 구현 예정
         """
-        # TODO: 보드를 예쁘게 출력하는 코드 작성
-        print("보드 출력 기능 - Person A가 구현 예정")
-        pass
+        print("\n  0 1 2")
+        print("  -----")
+        for i in range(3):
+            print(f"{i}|{self.board[i][0]}|{self.board[i][1]}|{self.board[i][2]}|")
+            if i < 2:
+                print("  -----")
+        print()
 
     def make_move(self, row, col):
         """
@@ -25,12 +29,13 @@ class TicTacToe:
         Returns:
             bool: 유효한 수인지 여부
         """
-        # TODO: 
-        # 1. 해당 위치가 비어있는지 확인
-        # 2. 비어있다면 현재 플레이어의 마크 놓기
-        # 3. 플레이어 턴 바꾸기
-        # 4. 성공 여부 반환
-        print(f"수 놓기 기능 - Person A가 구현 예정: ({row}, {col})")
+        # 해당 위치가 비어있는지 확인
+        if 0 <= row <= 2 and 0 <= col <= 2 and self.board[row][col] == ' ':
+            # 비어있다면 현재 플레이어의 마크 놓기
+            self.board[row][col] = self.current_player
+            # 플레이어 턴 바꾸기
+            self.current_player = 'O' if self.current_player == 'X' else 'X'
+            return True
         return False
 
     def check_winner(self):
@@ -40,12 +45,26 @@ class TicTacToe:
         Returns:
             str: 승자 ('X', 'O', 'Tie', None)
         """
-        # TODO:
-        # 1. 가로 3줄 체크
-        # 2. 세로 3줄 체크  
-        # 3. 대각선 2줄 체크
-        # 4. 무승부 체크 (보드가 가득 참)
-        print("승부 판정 기능 - Person B가 구현 예정")
+        # 가로 3줄 체크
+        for row in range(3):
+            if self.board[row][0] == self.board[row][1] == self.board[row][2] != ' ':
+                return self.board[row][0]
+        
+        # 세로 3줄 체크
+        for col in range(3):
+            if self.board[0][col] == self.board[1][col] == self.board[2][col] != ' ':
+                return self.board[0][col]
+        
+        # 대각선 2줄 체크
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] != ' ':
+            return self.board[0][0]
+        if self.board[0][2] == self.board[1][1] == self.board[2][0] != ' ':
+            return self.board[0][2]
+        
+        # 무승부 체크
+        if self.is_board_full():
+            return 'Tie'
+        
         return None
 
     def is_board_full(self):
@@ -55,9 +74,11 @@ class TicTacToe:
         Returns:
             bool: 보드가 가득 찼는지 여부
         """
-        # TODO: 모든 칸이 채워져 있는지 확인
-        print("보드 가득참 체크 - Person B가 구현 예정")
-        return False
+        for row in range(3):
+            for col in range(3):
+                if self.board[row][col] == ' ':
+                    return False
+        return True
 
     def get_user_input(self):
         """
@@ -66,24 +87,33 @@ class TicTacToe:
         Returns:
             tuple: (row, col) 좌표
         """
-        # TODO:
-        # 1. 사용자에게 좌표 입력 요청
-        # 2. 입력값 검증 (0-2 범위, 숫자인지 등)
-        # 3. 유효한 좌표 반환
-        print("사용자 입력 기능 - Person A가 구현 예정")
-        return (0, 0)
+        while True:
+            try:
+                user_input = input(f"플레이어 {self.current_player}의 차례입니다. 행과 열을 입력하세요 (예: 1 1): ")
+                row, col = map(int, user_input.split())
+                
+                # 입력값 검증 (0-2 범위)
+                if 0 <= row <= 2 and 0 <= col <= 2:
+                    return (row, col)
+                else:
+                    print("좌표는 0-2 사이의 숫자여야 합니다.")
+            except ValueError:
+                print("올바른 형식으로 입력하세요. 예: 1 1")
+            except KeyboardInterrupt:
+                raise
 
     def reset_game(self):
         """
         게임을 초기화하는 함수
         담당자: Person B가 구현 예정
         """
-        # TODO: 
-        # 1. 보드 초기화
-        # 2. 현재 플레이어를 X로 설정
-        # 3. 게임 상태 초기화
-        print("게임 리셋 기능 - Person B가 구현 예정")
-        pass
+        # 보드 초기화
+        self.board = [[' ' for _ in range(3)] for _ in range(3)]
+        # 현재 플레이어를 X로 설정
+        self.current_player = 'X'
+        # 게임 상태 초기화
+        self.game_over = False
+        self.winner = None
 
 
 def main():
